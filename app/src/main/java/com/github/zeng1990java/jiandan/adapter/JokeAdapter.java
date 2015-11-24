@@ -77,8 +77,12 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         if (getItemViewType(position) == ITEM_LOAD_MORE){
             return;
         }
+
+        JokeModel jokeModel = getItem(position);
         ViewHolder vh = (ViewHolder) holder;
-        vh.jokeContent.setText(getItem(position).getText_content());
+        vh.jokeContent.setText(jokeModel.getText_content());
+        vh.nickname.setText(jokeModel.getComment_author());
+        vh.time.setText(jokeModel.getComment_date());
     }
 
     @Override
@@ -97,6 +101,10 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         @Bind(R.id.joke_content)
         TextView jokeContent;
+        @Bind(R.id.nickname)
+        TextView nickname;
+        @Bind(R.id.time)
+        TextView time;
 
         public ViewHolder(View itemView) {
             super(itemView);
