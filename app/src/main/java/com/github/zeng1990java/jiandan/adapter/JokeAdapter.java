@@ -8,8 +8,11 @@ import android.widget.TextView;
 
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.JokeModel;
+import com.github.zeng1990java.jiandan.utils.TimeUtil;
 import com.github.zeng1990java.jiandan.utils.ToastUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.Bind;
@@ -28,6 +31,7 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<JokeModel> mDatas;
     private boolean hasMore;
+    private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public JokeAdapter(List<JokeModel> list){
         mDatas = list;
@@ -82,7 +86,13 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         ViewHolder vh = (ViewHolder) holder;
         vh.jokeContent.setText(jokeModel.getText_content());
         vh.nickname.setText(jokeModel.getComment_author());
-        vh.time.setText(jokeModel.getComment_date());
+
+        try {
+            long time = mDateFormat.parse(jokeModel.getComment_date()).getTime();
+            vh.time.setText(TimeUtil.getTimelineTime(time));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -91,7 +101,6 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     static class LoadMoreViewHolder extends RecyclerView.ViewHolder{
-
         public LoadMoreViewHolder(View itemView) {
             super(itemView);
         }
