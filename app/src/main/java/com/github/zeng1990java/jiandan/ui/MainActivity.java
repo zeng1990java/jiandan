@@ -12,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
+import com.github.zeng1990java.jiandan.ui.fragments.JokeListFragment;
 import com.socks.library.KLog;
 import com.trello.rxlifecycle.ActivityEvent;
 
@@ -58,40 +60,9 @@ public class MainActivity extends BaseToolbarActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        testGetJokeList();
-    }
-
-    private void testGetJokeList() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://jandan.net/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        JiandanApi jiandanApi = retrofit.create(JiandanApi.class);
-        jiandanApi.loadJokeList(1)
-                .compose(this.<JokeListModel>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Subscriber<JokeListModel>() {
-                            @Override
-                            public void onCompleted() {
-                                KLog.d();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                KLog.d();
-                            }
-
-                            @Override
-                            public void onNext(JokeListModel jokeListModel) {
-                                KLog.d(jokeListModel.getStatus());
-                                KLog.d(jokeListModel.getComments().get(0).toString());
-                            }
-                        }
-                );
+        if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new JokeListFragment()).commit();
+        }
     }
 
     @Override

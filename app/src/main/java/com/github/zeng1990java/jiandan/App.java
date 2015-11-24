@@ -3,6 +3,10 @@ package com.github.zeng1990java.jiandan;
 import android.app.Application;
 import android.content.Context;
 
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+
 /**
  * $desc
  *
@@ -13,6 +17,7 @@ public class App extends Application {
 
     private static App sApp;
     private static Context sContext;
+    private Retrofit mRetrofit;
 
     @Override
     public void onCreate() {
@@ -20,6 +25,18 @@ public class App extends Application {
 
         sApp = this;
         sContext = this;
+
+        initRetrofit();
+    }
+
+    private void initRetrofit() {
+        if (mRetrofit == null){
+            mRetrofit = new Retrofit.Builder()
+                    .baseUrl("http://jandan.net/")
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
     }
 
     public static Context getContext(){
@@ -28,5 +45,9 @@ public class App extends Application {
 
     public static App getApp(){
         return sApp;
+    }
+
+    public Retrofit getRetrofit(){
+        return mRetrofit;
     }
 }
