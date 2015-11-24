@@ -135,6 +135,8 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
                             @Override
                             public void onError(Throwable e) {
+                                mLoadmoreListener.reset();
+                                mLoadmoreListener.setHasMore(true);
                             }
 
                             @Override

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.JokeModel;
+import com.github.zeng1990java.jiandan.utils.ToastUtil;
 
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         @Bind(R.id.joke_content)
         TextView jokeContent;
@@ -100,7 +101,19 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            ToastUtil.showShort(v.getContext(), "Item Click");
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            ToastUtil.showShort(v.getContext(), "Item Long Click");
+            return true;
+        }
     }
 }
