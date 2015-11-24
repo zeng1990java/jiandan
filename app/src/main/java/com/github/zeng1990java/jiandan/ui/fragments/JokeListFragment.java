@@ -2,6 +2,7 @@ package com.github.zeng1990java.jiandan.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +17,8 @@ import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
 import com.github.zeng1990java.jiandan.model.JokeModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseFragment;
+import com.github.zeng1990java.jiandan.ui.listener.EndlessRecyclerOnScrollListener;
 import com.socks.library.KLog;
-import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.FragmentEvent;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
 
     private JokeAdapter mJokeAdapter;
+    private EndlessRecyclerOnScrollListener mLoadmoreListener;
+    private int mCurrentPage = 1;
 
     @Nullable
     @Override
@@ -56,22 +59,31 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
         ButterKnife.bind(this, view);
         KLog.d();
 
-        mRefreshLayout.setColorSchemeColors(R.color.colorAccent);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
+
+        mLoadmoreListener = new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore() {
+                loadMoreJokeList(mCurrentPage+1);
+            }
+        };
+
+        mRecyclerView.addOnScrollListener(mLoadmoreListener);
 
         mJokeAdapter = new JokeAdapter(new ArrayList<JokeModel>());
 
         mRecyclerView.setAdapter(mJokeAdapter);
 
+        mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.postDelayed(
                 new Runnable() {
                     @Override
                     public void run() {
                         mRefreshLayout.setRefreshing(true);
-                        refreshJokeList();
+                        onRefresh();
                     }
                 }
         , 345);
@@ -99,11 +111,46 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
                             @Override
                             public void onNext(JokeListModel jokeListModel) {
-                                KLog.d(jokeListModel.getStatus()+"; "+jokeListModel.getComments().size());
+                                KLog.d(jokeListModel.getStatus() + "; " + jokeListModel.getComments().size());
                                 mJokeAdapter.replaceAll(jokeListModel.getComments());
+                                setHasMore(jokeListModel);
                             }
                         }
                 );
+    }
+
+    private void loadMoreJokeList(int page){
+        KLog.d();
+        JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
+        jiandanApi.loadJokeList(page)
+                .compose(this.<JokeListModel>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Subscriber<JokeListModel>() {
+                            @Override
+                            public void onCompleted() {
+                                KLog.d();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+
+                            @Override
+                            public void onNext(JokeListModel jokeListModel) {
+                                KLog.d(jokeListModel.getStatus()+"; "+jokeListModel.getComments().size());
+                                mJokeAdapter.addAll(jokeListModel.getComments());
+                                setHasMore(jokeListModel);
+                            }
+                        }
+                );
+    }
+
+    private void setHasMore(JokeListModel jokeListModel){
+        mCurrentPage = jokeListModel.getCurrent_page();
+        mLoadmoreListener.setHasMore(jokeListModel.getCurrent_page() < jokeListModel.getPage_count());
+        mJokeAdapter.setHasMore(jokeListModel.getCurrent_page() < jokeListModel.getPage_count());
     }
 
     @Override

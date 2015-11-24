@@ -20,17 +20,24 @@ import butterknife.ButterKnife;
  * @author zxb
  * @date 15/11/24 上午7:47
  */
-public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder>{
+public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+    private static final int ITEM_NORMAL = 0;
+    private static final int ITEM_LOAD_MORE = 1;
 
     private List<JokeModel> mDatas;
+    private boolean hasMore;
 
     public JokeAdapter(List<JokeModel> list){
         mDatas = list;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_joke, parent, false));
+    public boolean isHasMore() {
+        return hasMore;
+    }
+
+    public void setHasMore(boolean isHasMore) {
+        this.hasMore = isHasMore;
     }
 
     public void replaceAll(List<JokeModel> list){
@@ -49,14 +56,40 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public int getItemViewType(int position) {
+        if (!isHasMore()){
+            return ITEM_NORMAL;
+        }
+        return position==mDatas.size()?ITEM_LOAD_MORE:ITEM_NORMAL;
+    }
 
-        holder.jokeContent.setText(getItem(position).getText_content());
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == ITEM_LOAD_MORE){
+            return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_item, parent, false));
+        }
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_joke, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == ITEM_LOAD_MORE){
+            return;
+        }
+        ViewHolder vh = (ViewHolder) holder;
+        vh.jokeContent.setText(getItem(position).getText_content());
     }
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return isHasMore()?mDatas.size()+1:mDatas.size();
+    }
+
+    static class LoadMoreViewHolder extends RecyclerView.ViewHolder{
+
+        public LoadMoreViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

@@ -43,4 +43,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.zhaokaiqiang.klog:library:1.1.0'
     compile 'com.android.support:cardview-v7:23.1.0'
+    compile 'com.pnikosis:materialish-progress:1.7'
 }
