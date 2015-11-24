@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.JokeModel;
+import com.github.zeng1990java.jiandan.utils.CopyUtil;
 import com.github.zeng1990java.jiandan.utils.TimeUtil;
 import com.github.zeng1990java.jiandan.utils.ToastUtil;
 
@@ -31,7 +32,6 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<JokeModel> mDatas;
     private boolean hasMore;
-    private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public JokeAdapter(List<JokeModel> list){
         mDatas = list;
@@ -84,15 +84,7 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         JokeModel jokeModel = getItem(position);
         ViewHolder vh = (ViewHolder) holder;
-        vh.jokeContent.setText(jokeModel.getText_content());
-        vh.nickname.setText(jokeModel.getComment_author());
-
-        try {
-            long time = mDateFormat.parse(jokeModel.getComment_date()).getTime();
-            vh.time.setText(TimeUtil.getTimelineTime(time));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        vh.setJokeModel(jokeModel);
     }
 
     @Override
@@ -115,6 +107,10 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Bind(R.id.time)
         TextView time;
 
+
+        private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        private JokeModel mJokeModel;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -122,14 +118,28 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             itemView.setOnLongClickListener(this);
         }
 
+        public void setJokeModel(JokeModel jokeModel){
+            mJokeModel = jokeModel;
+
+            jokeContent.setText(jokeModel.getText_content());
+            nickname.setText(jokeModel.getComment_author());
+
+            try {
+                long commentDate = mDateFormat.parse(jokeModel.getComment_date()).getTime();
+                time.setText(TimeUtil.getTimelineTime(commentDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         public void onClick(View v) {
-            ToastUtil.showShort(v.getContext(), "Item Click");
+            ToastUtil.showShort(v.getContext(), "TODO Item Click");
         }
 
         @Override
         public boolean onLongClick(View v) {
-            ToastUtil.showShort(v.getContext(), "Item Long Click");
+            CopyUtil.copyToClipboard(v.getContext(), mJokeModel.getText_content());
             return true;
         }
     }
