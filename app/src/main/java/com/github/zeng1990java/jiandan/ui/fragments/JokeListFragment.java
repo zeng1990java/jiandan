@@ -72,7 +72,7 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
         mRecyclerView.addOnScrollListener(mLoadmoreListener);
 
-        mJokeAdapter = new JokeAdapter(new ArrayList<JokeModel>());
+        mJokeAdapter = new JokeAdapter();
 
         mRecyclerView.setAdapter(mJokeAdapter);
 

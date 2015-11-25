@@ -25,77 +25,16 @@ import butterknife.ButterKnife;
  * @author zxb
  * @date 15/11/24 上午7:47
  */
-public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHolder>{
 
-    private static final int ITEM_NORMAL = 0;
-    private static final int ITEM_LOAD_MORE = 1;
-
-    private List<JokeModel> mDatas;
-    private boolean hasMore;
-
-    public JokeAdapter(List<JokeModel> list){
-        mDatas = list;
-    }
-
-    public boolean isHasMore() {
-        return hasMore;
-    }
-
-    public void setHasMore(boolean isHasMore) {
-        this.hasMore = isHasMore;
-    }
-
-    public void replaceAll(List<JokeModel> list){
-        mDatas.clear();
-        mDatas.addAll(list);
-        notifyDataSetChanged();
-    }
-
-    public void addAll(List<JokeModel> list){
-        mDatas.addAll(list);
-        notifyDataSetChanged();
-    }
-
-    public JokeModel getItem(int position){
-        return mDatas.get(position);
+    @Override
+    public ViewHolder onCreateNormalViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+        return new ViewHolder(inflater.inflate(R.layout.item_joke, parent, false));
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (!isHasMore()){
-            return ITEM_NORMAL;
-        }
-        return position==mDatas.size()?ITEM_LOAD_MORE:ITEM_NORMAL;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_LOAD_MORE){
-            return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_item, parent, false));
-        }
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_joke, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == ITEM_LOAD_MORE){
-            return;
-        }
-
-        JokeModel jokeModel = getItem(position);
-        ViewHolder vh = (ViewHolder) holder;
-        vh.setJokeModel(jokeModel);
-    }
-
-    @Override
-    public int getItemCount() {
-        return isHasMore()?mDatas.size()+1:mDatas.size();
-    }
-
-    static class LoadMoreViewHolder extends RecyclerView.ViewHolder{
-        public LoadMoreViewHolder(View itemView) {
-            super(itemView);
-        }
+    public void onBindNormalViewHolder(ViewHolder holder, int position) {
+        holder.setJokeModel(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
@@ -106,7 +45,6 @@ public class JokeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         TextView nickname;
         @Bind(R.id.time)
         TextView time;
-
 
         private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         private JokeModel mJokeModel;

@@ -26,6 +26,10 @@ public abstract class RvArrayAdapter<T, VH extends RecyclerView.ViewHolder> exte
         mDatas = datas;
     }
 
+    public T getItem(int position){
+        return mDatas.get(position);
+    }
+
     public void add(T data){
         add(0, data);
     }
@@ -72,29 +76,9 @@ public abstract class RvArrayAdapter<T, VH extends RecyclerView.ViewHolder> exte
                 clear();
                 return;
             }
-
-            // 移除列表中没有的数据
-            retainAll(datas);
-
-            if (mDatas.isEmpty()){
-                addAll(datas);
-                return;
-            }
-
-            for (int i = 0; i < datas.size(); i++) {
-                T item = datas.get(i);
-
-                int indexOld = mDatas.indexOf(item);
-                if (indexOld == -1){
-                    add(i, item);
-                }else if (i == indexOld){
-                    set(i, item);
-                }else {
-                    mDatas.remove(indexOld);
-                    mDatas.add(i , item);
-                    notifyItemMoved(indexOld, i);
-                }
-            }
+            mDatas.clear();
+            mDatas.addAll(datas);
+            notifyDataSetChanged();
         }
     }
 

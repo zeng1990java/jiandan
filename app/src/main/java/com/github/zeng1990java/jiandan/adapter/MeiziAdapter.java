@@ -17,7 +17,6 @@ import com.github.zeng1990java.jiandan.utils.ToastUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,77 +27,16 @@ import butterknife.ButterKnife;
  * @author zxb
  * @date 15/11/24 上午7:47
  */
-public class MeiziAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.ViewHolder>{
 
-    private static final int ITEM_NORMAL = 0;
-    private static final int ITEM_LOAD_MORE = 1;
-
-    private List<PictureModel> mDatas;
-    private boolean hasMore;
-
-    public MeiziAdapter(List<PictureModel> list){
-        mDatas = list;
-    }
-
-    public boolean isHasMore() {
-        return hasMore;
-    }
-
-    public void setHasMore(boolean isHasMore) {
-        this.hasMore = isHasMore;
-    }
-
-    public void replaceAll(List<PictureModel> list){
-        mDatas.clear();
-        mDatas.addAll(list);
-        notifyDataSetChanged();
-    }
-
-    public void addAll(List<PictureModel> list){
-        mDatas.addAll(list);
-        notifyDataSetChanged();
-    }
-
-    public PictureModel getItem(int position){
-        return mDatas.get(position);
+    @Override
+    public ViewHolder onCreateNormalViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+        return new ViewHolder(inflater.inflate(R.layout.item_meizi, parent, false));
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (!isHasMore()){
-            return ITEM_NORMAL;
-        }
-        return position==mDatas.size()?ITEM_LOAD_MORE:ITEM_NORMAL;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_LOAD_MORE){
-            return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_item, parent, false));
-        }
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meizi, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == ITEM_LOAD_MORE){
-            return;
-        }
-
-        PictureModel jokeModel = getItem(position);
-        ViewHolder vh = (ViewHolder) holder;
-        vh.setJokeModel(jokeModel);
-    }
-
-    @Override
-    public int getItemCount() {
-        return isHasMore()?mDatas.size()+1:mDatas.size();
-    }
-
-    static class LoadMoreViewHolder extends RecyclerView.ViewHolder{
-        public LoadMoreViewHolder(View itemView) {
-            super(itemView);
-        }
+    public void onBindNormalViewHolder(ViewHolder holder, int position) {
+        holder.setPictureModel(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
@@ -114,7 +52,7 @@ public class MeiziAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 
         private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        private PictureModel mJokeModel;
+        private PictureModel mPictureModel;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -123,24 +61,24 @@ public class MeiziAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             itemView.setOnLongClickListener(this);
         }
 
-        public void setJokeModel(PictureModel jokeModel){
-            mJokeModel = jokeModel;
+        public void setPictureModel(PictureModel pictureModel){
+            mPictureModel = pictureModel;
 
-            jokeContent.setText(jokeModel.getText_content());
-            nickname.setText(jokeModel.getComment_author());
-            if (TextUtils.isEmpty(jokeModel.getText_content())){
+            jokeContent.setText(pictureModel.getText_content());
+            nickname.setText(pictureModel.getComment_author());
+            if (TextUtils.isEmpty(pictureModel.getText_content())){
                 jokeContent.setVisibility(View.GONE);
             }else {
                 jokeContent.setVisibility(View.VISIBLE);
             }
 
             try {
-                long commentDate = mDateFormat.parse(jokeModel.getComment_date()).getTime();
+                long commentDate = mDateFormat.parse(pictureModel.getComment_date()).getTime();
                 time.setText(TimeUtil.getTimelineTime(commentDate));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Glide.with(itemView.getContext()).load(mJokeModel.getPics().get(0)).into(picture);
+            Glide.with(itemView.getContext()).load(mPictureModel.getPics().get(0)).into(picture);
         }
 
         @Override
@@ -150,7 +88,7 @@ public class MeiziAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         @Override
         public boolean onLongClick(View v) {
-            CopyUtil.copyToClipboard(v.getContext(), mJokeModel.getText_content());
+            CopyUtil.copyToClipboard(v.getContext(), mPictureModel.getText_content());
             return true;
         }
     }

@@ -71,7 +71,7 @@ public class MeiziPictureFragment extends BaseFragment implements SwipeRefreshLa
             }
         };
 
-        mMeiziAdapter = new MeiziAdapter(new ArrayList<PictureModel>());
+        mMeiziAdapter = new MeiziAdapter();
         mRecyclerView.setAdapter(mMeiziAdapter);
 
         mRecyclerView.addOnScrollListener(mLoadmoreListener);

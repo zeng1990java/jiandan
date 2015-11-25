@@ -13,7 +13,7 @@ import com.github.zeng1990java.jiandan.R;
  * @author zxb
  * @date 15/11/25 上午10:42
  */
-public abstract class RvLoadmoreAdapter<T, VH extends RecyclerView.ViewHolder> extends RvArrayAdapter {
+public abstract class RvLoadmoreAdapter<T, VH extends RecyclerView.ViewHolder> extends RvArrayAdapter<T, RecyclerView.ViewHolder> {
 
     private static final int ITEM_NORMAL = 0;
     private static final int ITEM_LOAD_MORE = Integer.MAX_VALUE / 3;
