@@ -64,9 +64,11 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
         public void setPictureModel(PictureModel pictureModel){
             mPictureModel = pictureModel;
 
-            jokeContent.setText(pictureModel.getText_content());
+            String content = pictureModel.getText_content();
+
+            jokeContent.setText(content);
             nickname.setText(pictureModel.getComment_author());
-            if (TextUtils.isEmpty(pictureModel.getText_content())){
+            if (TextUtils.isEmpty(content) || TextUtils.isEmpty(content.trim())){
                 jokeContent.setVisibility(View.GONE);
             }else {
                 jokeContent.setVisibility(View.VISIBLE);
@@ -78,7 +80,7 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Glide.with(itemView.getContext()).load(mPictureModel.getPics().get(0)).into(picture);
+            Glide.with(itemView.getContext()).load(mPictureModel.getPic()).into(picture);
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.github.zeng1990java.jiandan.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,20 @@ public class PictureModel {
     private String vote_positive;
     private String vote_negative;
     private List<String> pics;
+    private String pic;
+
+    public PictureModel() {
+    }
+
+    public PictureModel(String comment_ID, String comment_author, String comment_date, String text_content, String vote_positive, String vote_negative, String pic) {
+        this.comment_ID = comment_ID;
+        this.comment_author = comment_author;
+        this.comment_date = comment_date;
+        this.text_content = text_content;
+        this.vote_positive = vote_positive;
+        this.vote_negative = vote_negative;
+        this.pic = pic;
+    }
 
     public String getComment_ID() {
         return comment_ID;
@@ -71,5 +86,22 @@ public class PictureModel {
 
     public void setPics(List<String> pics) {
         this.pics = pics;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public List<PictureModel> toPictureModel(){
+        List<PictureModel> list = new ArrayList<>(pics.size());
+        for (String pic : pics) {
+            PictureModel pm = new PictureModel(comment_ID, comment_author, comment_date, text_content, vote_positive, vote_negative, pic);
+            list.add(pm);
+        }
+        return list;
     }
 }
