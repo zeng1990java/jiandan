@@ -18,6 +18,8 @@ import com.github.zeng1990java.jiandan.model.JokeListModel;
 import com.github.zeng1990java.jiandan.model.JokeModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseFragment;
 import com.github.zeng1990java.jiandan.ui.listener.EndlessRecyclerOnScrollListener;
+import com.github.zeng1990java.jiandan.view.ColorSwipeRefreshLayout;
+import com.github.zeng1990java.jiandan.view.LoadmoreRecyclerView;
 import com.socks.library.KLog;
 import com.trello.rxlifecycle.FragmentEvent;
 
@@ -38,13 +40,11 @@ import rx.schedulers.Schedulers;
 public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
     @Bind(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout mRefreshLayout;
+    ColorSwipeRefreshLayout mRefreshLayout;
     @Bind(R.id.recycler_view)
-    RecyclerView mRecyclerView;
-
+    LoadmoreRecyclerView mRecyclerView;
 
     private JokeAdapter mJokeAdapter;
-    private EndlessRecyclerOnScrollListener mLoadmoreListener;
     private int mCurrentPage = 1;
 
     @Nullable
@@ -63,20 +63,17 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        mLoadmoreListener = new EndlessRecyclerOnScrollListener(layoutManager) {
+        mRecyclerView.setLoadmoreListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
                 loadMoreJokeList(mCurrentPage+1);
             }
-        };
-
-        mRecyclerView.addOnScrollListener(mLoadmoreListener);
+        });
 
         mJokeAdapter = new JokeAdapter();
 
         mRecyclerView.setAdapter(mJokeAdapter);
 
-        mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.postDelayed(
                 new Runnable() {
@@ -135,8 +132,7 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
                             @Override
                             public void onError(Throwable e) {
-                                mLoadmoreListener.reset();
-                                mLoadmoreListener.setHasMore(true);
+                                mRecyclerView.setLoadmoreError();
                             }
 
                             @Override
@@ -151,8 +147,7 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
     private void setHasMore(JokeListModel jokeListModel){
         mCurrentPage = jokeListModel.getCurrent_page();
-        mLoadmoreListener.setHasMore(jokeListModel.getCurrent_page() < jokeListModel.getPage_count());
-        mJokeAdapter.setHasMore(jokeListModel.getCurrent_page() < jokeListModel.getPage_count());
+        mRecyclerView.setHasMore(mCurrentPage < jokeListModel.getPage_count());
     }
 
     @Override
