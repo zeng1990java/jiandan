@@ -72,7 +72,7 @@ public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            ToastUtil.showShort(v.getContext(), "TODO Item Click");
+//            ToastUtil.showShort(v.getContext(), "TODO Item Click");
         }
 
         @Override

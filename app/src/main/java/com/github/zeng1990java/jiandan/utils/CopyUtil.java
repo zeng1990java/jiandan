@@ -13,7 +13,7 @@ import android.text.TextUtils;
  */
 public class CopyUtil {
     public static void copyToClipboard(Context context, String text){
-        if (TextUtils.isEmpty(text)){
+        if (TextUtils.isEmpty(text) || TextUtils.isEmpty(text.trim())){
             return;
         }
         ClipData data = ClipData.newPlainText("jiandan", text);

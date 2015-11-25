@@ -80,7 +80,11 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Glide.with(itemView.getContext()).load(mPictureModel.getPic()).into(picture);
+            Glide.with(itemView.getContext())
+                    .load(mPictureModel.getPic())
+                    .placeholder(android.R.drawable.progress_indeterminate_horizontal)
+                    .crossFade()
+                    .into(picture);
         }
 
         @Override
