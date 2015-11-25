@@ -5,4 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">设置</string>
+
+    <string name="nav_joke">段子</string>
+    <string name="nav_meizi_picture">妹子图</string>
 </resources>

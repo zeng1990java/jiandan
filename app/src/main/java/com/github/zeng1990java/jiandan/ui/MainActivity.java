@@ -19,9 +19,12 @@ import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
 import com.github.zeng1990java.jiandan.ui.fragments.JokeListFragment;
+import com.github.zeng1990java.jiandan.ui.fragments.MeiziPictureFragment;
 import com.socks.library.KLog;
 import com.trello.rxlifecycle.ActivityEvent;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -32,15 +35,21 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends BaseToolbarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @Bind(R.id.fab)
+    FloatingActionButton mFab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(
+        ButterKnife.bind(this);
+
+        setupToolbar();
+
+        mFab.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -50,11 +59,10 @@ public class MainActivity extends BaseToolbarActivity
                 }
         );
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+                this, mDrawerLayout, getToolbar(), R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
-        drawer.setDrawerListener(toggle);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -62,14 +70,15 @@ public class MainActivity extends BaseToolbarActivity
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new JokeListFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_camera);
+            setTitle(R.string.nav_joke);
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -105,8 +114,11 @@ public class MainActivity extends BaseToolbarActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new JokeListFragment()).commit();
+            setTitle(R.string.nav_joke);
         } else if (id == R.id.nav_gallery) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new MeiziPictureFragment()).commit();
+            setTitle(R.string.nav_meizi_picture);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -117,8 +129,7 @@ public class MainActivity extends BaseToolbarActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
