@@ -1,9 +1,7 @@
 package com.github.zeng1990java.jiandan.ui.fragments;
 
-import com.github.zeng1990java.jiandan.App;
 import com.github.zeng1990java.jiandan.adapter.JokeAdapter;
 import com.github.zeng1990java.jiandan.adapter.RvLoadmoreAdapter;
-import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseTimelineFragment;
 import com.socks.library.KLog;
@@ -25,9 +23,7 @@ public class JokeListFragment extends BaseTimelineFragment{
 
     @Override
     public void onRefresh() {
-        KLog.d();
-        JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
-        jiandanApi.loadJokeList(1)
+        getJiandanApi().loadJokeList(1)
                 .compose(this.<JokeListModel>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,8 +52,7 @@ public class JokeListFragment extends BaseTimelineFragment{
 
     @Override
     protected void onLoadmore(int page) {
-        JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
-        jiandanApi.loadJokeList(page)
+        getJiandanApi().loadJokeList(page)
                 .compose(this.<JokeListModel>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

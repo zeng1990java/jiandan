@@ -2,10 +2,8 @@ package com.github.zeng1990java.jiandan.ui.fragments;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import com.github.zeng1990java.jiandan.App;
 import com.github.zeng1990java.jiandan.adapter.MeiziAdapter;
 import com.github.zeng1990java.jiandan.adapter.RvLoadmoreAdapter;
-import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.PictureListModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseTimelineFragment;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -28,8 +26,7 @@ public class MeiziPictureFragment extends BaseTimelineFragment implements SwipeR
 
     @Override
     public void onRefresh() {
-        JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
-        jiandanApi.loadMeiziPictureList(1)
+        getJiandanApi().loadMeiziPictureList(1)
                 .compose(this.<PictureListModel>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,8 +53,7 @@ public class MeiziPictureFragment extends BaseTimelineFragment implements SwipeR
 
     @Override
     protected void onLoadmore(int page) {
-        JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
-        jiandanApi.loadMeiziPictureList(page)
+        getJiandanApi().loadMeiziPictureList(page)
                 .compose(this.<PictureListModel>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -73,7 +69,7 @@ public class MeiziPictureFragment extends BaseTimelineFragment implements SwipeR
 
                     @Override
                     public void onNext(PictureListModel pictureListModel) {
-                        mMeiziAdapter.replaceAll(pictureListModel.getComments());
+                        mMeiziAdapter.addAll(pictureListModel.getComments());
                         setHasMore(pictureListModel.getCurrent_page(), pictureListModel.getPage_count());
                     }
                 });

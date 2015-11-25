@@ -12,7 +12,7 @@
     android:layout_marginTop="@dimen/card_margin_top"
     android:layout_marginBottom="@dimen/card_margin_bottom"
     android:minHeight="120dp"
-    app:cardElevation="4dp"
+    app:cardElevation="@dimen/card_elevation"
     app:cardCornerRadius="2dp"
     >
 
@@ -59,7 +59,7 @@
             tools:text="南方的朋友们！我有个提议！既然你们今年冬天那么热，不如就取消寒假吧"
             />
 
-        <ImageView
+        <com.github.zeng1990java.jiandan.view.TimelineImageView
             android:id="@+id/meizi_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

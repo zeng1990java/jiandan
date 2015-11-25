@@ -3,6 +3,8 @@ package com.github.zeng1990java.jiandan;
 import android.app.Application;
 import android.content.Context;
 
+import com.github.zeng1990java.jiandan.api.JiandanApi;
+
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -18,6 +20,7 @@ public class App extends Application {
     private static App sApp;
     private static Context sContext;
     private Retrofit mRetrofit;
+    private JiandanApi mJiandanApi;
 
     @Override
     public void onCreate() {
@@ -49,5 +52,16 @@ public class App extends Application {
 
     public Retrofit getRetrofit(){
         return mRetrofit;
+    }
+
+    public JiandanApi getJiandanApi(){
+        if (mJiandanApi == null) {
+            synchronized (this) {
+                if (mJiandanApi == null){
+                    mJiandanApi = mRetrofit.create(JiandanApi.class);
+                }
+            }
+        }
+        return mJiandanApi;
     }
 }

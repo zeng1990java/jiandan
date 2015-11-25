@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.zeng1990java.jiandan.App;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.adapter.RvLoadmoreAdapter;
+import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.ui.listener.EndlessRecyclerOnScrollListener;
 import com.github.zeng1990java.jiandan.view.ColorSwipeRefreshLayout;
 import com.github.zeng1990java.jiandan.view.LoadmoreRecyclerView;
@@ -80,6 +82,10 @@ public abstract class BaseTimelineFragment extends BaseFragment implements Swipe
 
     public void setLoadmoreError(){
         mRecyclerView.setLoadmoreError();
+    }
+
+    public JiandanApi getJiandanApi(){
+        return App.getApp().getJiandanApi();
     }
 
     protected abstract void onLoadmore(int page);
