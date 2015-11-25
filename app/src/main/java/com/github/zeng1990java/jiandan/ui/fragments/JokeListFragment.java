@@ -1,32 +1,14 @@
 package com.github.zeng1990java.jiandan.ui.fragments;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.github.zeng1990java.jiandan.App;
-import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.adapter.JokeAdapter;
+import com.github.zeng1990java.jiandan.adapter.RvLoadmoreAdapter;
 import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
-import com.github.zeng1990java.jiandan.model.JokeModel;
-import com.github.zeng1990java.jiandan.ui.base.BaseFragment;
-import com.github.zeng1990java.jiandan.ui.listener.EndlessRecyclerOnScrollListener;
-import com.github.zeng1990java.jiandan.view.ColorSwipeRefreshLayout;
-import com.github.zeng1990java.jiandan.view.LoadmoreRecyclerView;
+import com.github.zeng1990java.jiandan.ui.base.BaseTimelineFragment;
 import com.socks.library.KLog;
 import com.trello.rxlifecycle.FragmentEvent;
 
-import java.util.ArrayList;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -37,56 +19,12 @@ import rx.schedulers.Schedulers;
  * @author zxb
  * @date 15/11/24 上午7:26
  */
-public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class JokeListFragment extends BaseTimelineFragment{
 
-    @Bind(R.id.swipe_refresh_layout)
-    ColorSwipeRefreshLayout mRefreshLayout;
-    @Bind(R.id.recycler_view)
-    LoadmoreRecyclerView mRecyclerView;
-
-    private JokeAdapter mJokeAdapter;
-    private int mCurrentPage = 1;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.content_joke_list, container, false);
-    }
+    private JokeAdapter mJokeAdapter = new JokeAdapter();
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        KLog.d();
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);
-
-        mRecyclerView.setLoadmoreListener(new EndlessRecyclerOnScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore() {
-                loadMoreJokeList(mCurrentPage+1);
-            }
-        });
-
-        mJokeAdapter = new JokeAdapter();
-
-        mRecyclerView.setAdapter(mJokeAdapter);
-
-        mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayout.setRefreshing(true);
-                        onRefresh();
-                    }
-                }
-        , 345);
-    }
-
-    private void refreshJokeList(){
+    public void onRefresh() {
         KLog.d();
         JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
         jiandanApi.loadJokeList(1)
@@ -98,26 +36,26 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
                             @Override
                             public void onCompleted() {
                                 KLog.d();
-                                mRefreshLayout.setRefreshing(false);
+                                setRefreshing(false);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                mRefreshLayout.setRefreshing(false);
+                                setRefreshing(false);
                             }
 
                             @Override
                             public void onNext(JokeListModel jokeListModel) {
                                 KLog.d(jokeListModel.getStatus() + "; " + jokeListModel.getComments().size());
                                 mJokeAdapter.replaceAll(jokeListModel.getComments());
-                                setHasMore(jokeListModel);
+                                setHasMore(jokeListModel.getCurrent_page(), jokeListModel.getPage_count());
                             }
                         }
                 );
     }
 
-    private void loadMoreJokeList(int page){
-        KLog.d();
+    @Override
+    protected void onLoadmore(int page) {
         JiandanApi jiandanApi = App.getApp().getRetrofit().create(JiandanApi.class);
         jiandanApi.loadJokeList(page)
                 .compose(this.<JokeListModel>bindUntilEvent(FragmentEvent.DESTROY_VIEW))
@@ -132,27 +70,20 @@ public class JokeListFragment extends BaseFragment implements SwipeRefreshLayout
 
                             @Override
                             public void onError(Throwable e) {
-                                mRecyclerView.setLoadmoreError();
+                                setLoadmoreError();
                             }
 
                             @Override
                             public void onNext(JokeListModel jokeListModel) {
-                                KLog.d(jokeListModel.getStatus()+"; "+jokeListModel.getComments().size());
                                 mJokeAdapter.addAll(jokeListModel.getComments());
-                                setHasMore(jokeListModel);
+                                setHasMore(jokeListModel.getCurrent_page(), jokeListModel.getPage_count());
                             }
                         }
                 );
     }
 
-    private void setHasMore(JokeListModel jokeListModel){
-        mCurrentPage = jokeListModel.getCurrent_page();
-        mRecyclerView.setHasMore(mCurrentPage < jokeListModel.getPage_count());
-    }
-
     @Override
-    public void onRefresh() {
-        KLog.d();
-        refreshJokeList();
+    protected RvLoadmoreAdapter provideAdapter() {
+        return mJokeAdapter;
     }
 }
