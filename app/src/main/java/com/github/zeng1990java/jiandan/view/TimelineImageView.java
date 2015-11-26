@@ -1,8 +1,9 @@
 package com.github.zeng1990java.jiandan.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
+import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -10,9 +11,8 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.github.zeng1990java.jiandan.R;
-import com.socks.library.KLog;
 
 import java.util.HashMap;
 
@@ -24,12 +24,12 @@ import java.util.HashMap;
  */
 public class TimelineImageView extends ImageView{
 
-
     private static final HashMap<String, Point> sUrlSizeMap = new HashMap<>();
 
     private String mUrl;
     private Drawable mPlaceHolder;
     private GifDrawable mGifDrawable;
+    private boolean isPlaying;
 
     public TimelineImageView(Context context) {
         this(context, null);
@@ -48,21 +48,26 @@ public class TimelineImageView extends ImageView{
         int width = MeasureSpec.getSize(widthMeasureSpec);
 
         Drawable drawable = getDrawable();
+        Point point = sUrlSizeMap.get(mUrl);
         if (drawable == null){
-            setMeasuredDimension(width, width);
+            if (point == null) {
+                setMeasuredDimension(width, width);
+            }else {
+                setMeasuredDimension(point.x, point.y);
+            }
         }else {
             int dw = drawable.getIntrinsicWidth();
             int dh = drawable.getIntrinsicHeight();
 
             int height = 0;
-            if (TextUtils.isEmpty(mUrl) || drawable == mPlaceHolder){
+            if (point != null){
+                height = point.y;
+            }else if (TextUtils.isEmpty(mUrl) || drawable == mPlaceHolder){
                 height = width;
             }else {
-                Point point = sUrlSizeMap.get(mUrl);
-                if (point == null){
-                    point = new Point(width, (int) (dh * 1.0f * width / dw));
-                    sUrlSizeMap.put(mUrl, point);
-                }
+                point = new Point(width, (int) (dh * 1.0f * width / dw));
+                sUrlSizeMap.put(mUrl, point);
+
                 height = point.y;
             }
 
@@ -73,6 +78,7 @@ public class TimelineImageView extends ImageView{
 
     public void loadImage(RequestManager rm, String url){
         mUrl = url;
+        isPlaying = false;
         if (mGifDrawable != null){
             mGifDrawable.setCallback(null);
             mGifDrawable = null;
@@ -80,11 +86,25 @@ public class TimelineImageView extends ImageView{
         if (mPlaceHolder == null){
             mPlaceHolder = ContextCompat.getDrawable(getContext(), android.R.drawable.progress_indeterminate_horizontal);
         }
-        rm.load(url)
-                .crossFade()
-                .dontAnimate()
-                .placeholder(mPlaceHolder)
-                .into(this);
+        if (isGif(mUrl)){
+            rm.load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade()
+                    .dontAnimate()
+                    .placeholder(mPlaceHolder)
+                    .into(this);
+        }else {
+            rm.load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade()
+                    .placeholder(mPlaceHolder)
+                    .into(this);
+        }
+
+    }
+
+    private boolean isGif(String url){
+        return url.toLowerCase().endsWith(".gif");
     }
 
     @Override
@@ -114,15 +134,29 @@ public class TimelineImageView extends ImageView{
         }
     }
 
+    @Override
+    public void invalidateDrawable(Drawable dr) {
+        if (isPlaying){
+            super.invalidateDrawable(dr);
+        }else if (mGifDrawable != null){
+            mGifDrawable.stop();
+            Bitmap firstFrame = mGifDrawable.getFirstFrame();
+            super.invalidateDrawable(new BitmapDrawable(firstFrame));
+        }else {
+            super.invalidateDrawable(dr);
+        }
+    }
 
     public void starPlayGif(){
         if(mGifDrawable!=null){
+            isPlaying = true;
             mGifDrawable.start();
         }
     }
 
     public void stopPlayGif(){
         if(mGifDrawable!=null){
+            isPlaying = false;
             mGifDrawable.stop();
         }
     }
@@ -138,6 +172,10 @@ public class TimelineImageView extends ImageView{
         return mGifDrawable != null;
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+    }
 
     @Override
     protected void onDetachedFromWindow() {
