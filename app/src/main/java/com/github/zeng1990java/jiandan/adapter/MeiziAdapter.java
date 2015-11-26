@@ -1,5 +1,7 @@
 package com.github.zeng1990java.jiandan.adapter;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,11 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.data.DataFetcher;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.PictureModel;
 import com.github.zeng1990java.jiandan.utils.CopyUtil;
 import com.github.zeng1990java.jiandan.utils.TimeUtil;
 import com.github.zeng1990java.jiandan.utils.ToastUtil;
+import com.github.zeng1990java.jiandan.view.TimelineImageView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +30,7 @@ import butterknife.ButterKnife;
 
 /**
  * $desc
- *
+ * gif的播放与暂停感谢https://github.com/MMCBen提供技术支持
  * @author zxb
  * @date 15/11/24 上午7:47
  */
@@ -48,7 +55,7 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
         @Bind(R.id.time)
         TextView time;
         @Bind(R.id.meizi_picture)
-        ImageView picture;
+        TimelineImageView picture;
 
 
         private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -80,16 +87,18 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Glide.with(itemView.getContext())
-                    .load(mPictureModel.getPic())
-                    .placeholder(android.R.drawable.progress_indeterminate_horizontal)
-                    .crossFade()
-                    .into(picture);
+            picture.loadImage(Glide.with(itemView.getContext()), mPictureModel.getPic());
         }
 
         @Override
         public void onClick(View v) {
-            ToastUtil.showShort(v.getContext(), "TODO Item Click");
+            if (picture.isGifDrawable()){
+                if (picture.isGifRunning()){
+                    picture.stopPlayGif();
+                }else {
+                    picture.starPlayGif();
+                }
+            }
         }
 
         @Override
