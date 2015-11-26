@@ -59,12 +59,24 @@
             tools:text="南方的朋友们！我有个提议！既然你们今年冬天那么热，不如就取消寒假吧"
             />
 
-        <com.github.zeng1990java.jiandan.view.TimelineImageView
-            android:id="@+id/meizi_picture"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            />
+            android:layout_height="wrap_content">
+            <com.github.zeng1990java.jiandan.view.TimelineImageView
+                android:id="@+id/meizi_picture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                />
+            <ImageView
+                android:id="@+id/gif_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_play_gif"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+
 
     </LinearLayout>
 

@@ -56,6 +56,8 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
         TextView time;
         @Bind(R.id.meizi_picture)
         TimelineImageView picture;
+        @Bind(R.id.gif_icon)
+        ImageView gifIcon;
 
 
         private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -88,6 +90,11 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
                 e.printStackTrace();
             }
             picture.loadImage(Glide.with(itemView.getContext()), mPictureModel.getPic());
+            if (mPictureModel.getPic().endsWith(".gif")){
+                gifIcon.setVisibility(View.VISIBLE);
+            }else {
+                gifIcon.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -95,8 +102,10 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
             if (picture.isGifDrawable()){
                 if (picture.isGifRunning()){
                     picture.stopPlayGif();
+                    gifIcon.setVisibility(View.VISIBLE);
                 }else {
                     picture.starPlayGif();
+                    gifIcon.setVisibility(View.GONE);
                 }
             }
         }

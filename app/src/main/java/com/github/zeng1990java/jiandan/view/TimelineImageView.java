@@ -1,6 +1,7 @@
 package com.github.zeng1990java.jiandan.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.github.zeng1990java.jiandan.R;
+import com.socks.library.KLog;
 
 import java.util.HashMap;
 
@@ -28,13 +31,12 @@ public class TimelineImageView extends ImageView{
     private Drawable mPlaceHolder;
     private GifDrawable mGifDrawable;
 
-
     public TimelineImageView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public TimelineImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public TimelineImageView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -71,7 +73,10 @@ public class TimelineImageView extends ImageView{
 
     public void loadImage(RequestManager rm, String url){
         mUrl = url;
-        mGifDrawable = null;
+        if (mGifDrawable != null){
+            mGifDrawable.setCallback(null);
+            mGifDrawable = null;
+        }
         if (mPlaceHolder == null){
             mPlaceHolder = ContextCompat.getDrawable(getContext(), android.R.drawable.progress_indeterminate_horizontal);
         }
@@ -137,6 +142,7 @@ public class TimelineImageView extends ImageView{
     @Override
     protected void onDetachedFromWindow() {
         if(mGifDrawable!=null){
+            mGifDrawable.setCallback(null);
             mGifDrawable=null;
         }
         super.onDetachedFromWindow();
