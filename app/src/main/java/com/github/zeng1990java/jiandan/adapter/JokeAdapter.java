@@ -10,11 +10,10 @@ import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.JokeModel;
 import com.github.zeng1990java.jiandan.utils.CopyUtil;
 import com.github.zeng1990java.jiandan.utils.TimeUtil;
-import com.github.zeng1990java.jiandan.utils.ToastUtil;
+import com.github.zeng1990java.jiandan.view.TimelineTimeView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,12 +28,12 @@ public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateNormalViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.item_joke, parent, false));
+        return ViewHolder.newInstance(inflater, parent);
     }
 
     @Override
     public void onBindNormalViewHolder(ViewHolder holder, int position) {
-        holder.setJokeModel(getItem(position));
+        holder.onBindViewHolder(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
@@ -44,10 +43,14 @@ public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHo
         @Bind(R.id.nickname)
         TextView nickname;
         @Bind(R.id.time)
-        TextView time;
+        TimelineTimeView time;
 
-        private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         private JokeModel mJokeModel;
+
+        public static ViewHolder newInstance(LayoutInflater inflater, ViewGroup parent) {
+            View view = inflater.inflate(R.layout.item_joke, parent, false);
+            return new ViewHolder(view);
+        }
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -56,18 +59,12 @@ public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHo
             itemView.setOnLongClickListener(this);
         }
 
-        public void setJokeModel(JokeModel jokeModel){
+        public void onBindViewHolder(JokeModel jokeModel){
             mJokeModel = jokeModel;
 
             jokeContent.setText(jokeModel.getText_content());
             nickname.setText(jokeModel.getComment_author());
-
-            try {
-                long commentDate = mDateFormat.parse(jokeModel.getComment_date()).getTime();
-                time.setText(TimeUtil.getTimelineTime(commentDate));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            time.setFormatTime(jokeModel.getComment_date());
         }
 
         @Override
