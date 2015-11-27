@@ -1,5 +1,6 @@
 package com.github.zeng1990java.jiandan.adapter;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.NewsModel;
+import com.github.zeng1990java.jiandan.ui.NewsDetailActivity;
 import com.github.zeng1990java.jiandan.utils.ToastUtil;
 
 import butterknife.Bind;
@@ -48,6 +50,7 @@ public class NewsAdapter extends RvLoadmoreAdapter<NewsModel, NewsAdapter.ViewHo
         @Bind(R.id.preview)
         ImageView preview;
 
+        private NewsModel mNewsModel;
         private RequestManager mRequestManager;
 
         public ViewHolder setRequestManager(RequestManager requestManager) {
@@ -67,7 +70,9 @@ public class NewsAdapter extends RvLoadmoreAdapter<NewsModel, NewsAdapter.ViewHo
         }
 
         public void onBindViewHolder(NewsModel itemData) {
-            // TODO bind data
+
+            mNewsModel = itemData;
+
             title.setText(itemData.getTitle());
             nicknameGroup.setText(String.format("%s @ %s", itemData.getAuthor().getName(), itemData.getTags().get(0).getTitle()));
 
@@ -79,7 +84,7 @@ public class NewsAdapter extends RvLoadmoreAdapter<NewsModel, NewsAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            ToastUtil.showShort(v.getContext(), "Item Click "+getAdapterPosition());
+            NewsDetailActivity.start((Activity) v.getContext(), mNewsModel);
         }
     }
 }

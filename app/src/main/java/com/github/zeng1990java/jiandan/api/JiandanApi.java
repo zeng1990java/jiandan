@@ -1,6 +1,7 @@
 package com.github.zeng1990java.jiandan.api;
 
 import com.github.zeng1990java.jiandan.model.JokeListModel;
+import com.github.zeng1990java.jiandan.model.NewsDetailModel;
 import com.github.zeng1990java.jiandan.model.NewsListModel;
 import com.github.zeng1990java.jiandan.model.PictureListModel;
 
@@ -23,4 +24,7 @@ public interface JiandanApi {
 
     @GET("?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&")
     Observable<NewsListModel> loadNewsList(@Query("page") int page);
+
+    @GET("?oxwlxojflwblxbsapi=get_post&include=content&")
+    Observable<NewsDetailModel> getNewsDetail(@Query("id") int id);
 }
