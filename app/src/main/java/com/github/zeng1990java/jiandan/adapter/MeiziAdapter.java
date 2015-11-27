@@ -12,12 +12,8 @@ import com.bumptech.glide.Glide;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.PictureModel;
 import com.github.zeng1990java.jiandan.utils.CopyUtil;
-import com.github.zeng1990java.jiandan.utils.TimeUtil;
 import com.github.zeng1990java.jiandan.view.TimelineImageView;
 import com.github.zeng1990java.jiandan.view.TimelineTimeView;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,7 +39,7 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         @Bind(R.id.meizi_content)
-        TextView jokeContent;
+        TextView content;
         @Bind(R.id.nickname)
         TextView nickname;
         @Bind(R.id.time)
@@ -53,8 +49,6 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
         @Bind(R.id.gif_icon)
         ImageView gifIcon;
 
-
-        private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         private PictureModel mPictureModel;
 
         public static ViewHolder newInstance(LayoutInflater inflater, ViewGroup parent) {
@@ -74,15 +68,16 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
 
             String content = pictureModel.getText_content();
 
-            jokeContent.setText(content);
+            this.content.setText(content);
             nickname.setText(pictureModel.getComment_author());
             if (TextUtils.isEmpty(content) || TextUtils.isEmpty(content.trim())){
-                jokeContent.setVisibility(View.GONE);
+                this.content.setVisibility(View.GONE);
             }else {
-                jokeContent.setVisibility(View.VISIBLE);
+                this.content.setVisibility(View.VISIBLE);
             }
 
             time.setFormatTime(pictureModel.getComment_date());
+
             picture.loadImage(Glide.with(itemView.getContext()), mPictureModel.getPic());
             if (mPictureModel.getPic().endsWith(".gif")){
                 gifIcon.setVisibility(View.VISIBLE);

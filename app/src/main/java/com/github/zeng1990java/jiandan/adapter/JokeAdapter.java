@@ -9,11 +9,7 @@ import android.widget.TextView;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.JokeModel;
 import com.github.zeng1990java.jiandan.utils.CopyUtil;
-import com.github.zeng1990java.jiandan.utils.TimeUtil;
 import com.github.zeng1990java.jiandan.view.TimelineTimeView;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,7 +35,7 @@ public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         @Bind(R.id.joke_content)
-        TextView jokeContent;
+        TextView content;
         @Bind(R.id.nickname)
         TextView nickname;
         @Bind(R.id.time)
@@ -62,7 +58,7 @@ public class JokeAdapter extends RvLoadmoreAdapter<JokeModel, JokeAdapter.ViewHo
         public void onBindViewHolder(JokeModel jokeModel){
             mJokeModel = jokeModel;
 
-            jokeContent.setText(jokeModel.getText_content());
+            content.setText(jokeModel.getText_content());
             nickname.setText(jokeModel.getComment_author());
             time.setFormatTime(jokeModel.getComment_date());
         }
