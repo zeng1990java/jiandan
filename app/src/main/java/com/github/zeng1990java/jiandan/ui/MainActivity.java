@@ -22,6 +22,7 @@ import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
 import com.github.zeng1990java.jiandan.ui.fragments.JokeListFragment;
 import com.github.zeng1990java.jiandan.ui.fragments.MeiziPictureFragment;
 import com.github.zeng1990java.jiandan.ui.fragments.NewsFragment;
+import com.github.zeng1990java.jiandan.utils.ToastUtil;
 import com.socks.library.KLog;
 import com.trello.rxlifecycle.ActivityEvent;
 
@@ -37,10 +38,12 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends BaseToolbarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final long BACK_PRESSED_WAIT_TIME = 2000;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @Bind(R.id.fab)
     FloatingActionButton mFab;
+    private long mBackPressedClickTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,12 @@ public class MainActivity extends BaseToolbarActivity
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
+            long curTime = System.currentTimeMillis();
+            if(curTime - mBackPressedClickTime >= BACK_PRESSED_WAIT_TIME){
+                ToastUtil.showShort(this, "再按一次退出程序");
+                mBackPressedClickTime = curTime;
+                return;
+            }
             super.onBackPressed();
         }
     }
