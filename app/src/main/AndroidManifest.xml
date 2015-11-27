@@ -26,6 +26,9 @@
         <meta-data
             android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
             android:value="GlideModule" />
+        <meta-data
+            android:name="com.github.zeng1990java.jiandan.config.CacheGlideModule"
+            android:value="GlideModule" />
     </application>
 
 </manifest>

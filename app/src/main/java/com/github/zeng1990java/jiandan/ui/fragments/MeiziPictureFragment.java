@@ -1,7 +1,9 @@
 package com.github.zeng1990java.jiandan.ui.fragments;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.github.zeng1990java.jiandan.adapter.MeiziAdapter;
 import com.github.zeng1990java.jiandan.adapter.RvLoadmoreAdapter;
 import com.github.zeng1990java.jiandan.model.PictureListModel;
@@ -24,10 +26,16 @@ import rx.schedulers.Schedulers;
  * @author zxb
  * @date 15/11/24 下午11:13
  */
-public class MeiziPictureFragment extends BaseTimelineFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MeiziPictureFragment extends BaseTimelineFragment{
 
 
-    private MeiziAdapter mMeiziAdapter = new MeiziAdapter();
+    private MeiziAdapter mMeiziAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMeiziAdapter = new MeiziAdapter(Glide.with(this));
+    }
 
     @Override
     public void onRefresh() {
@@ -107,4 +115,6 @@ public class MeiziPictureFragment extends BaseTimelineFragment implements SwipeR
     protected RvLoadmoreAdapter provideAdapter() {
         return mMeiziAdapter;
     }
+
+
 }

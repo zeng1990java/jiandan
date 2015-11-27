@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.PictureModel;
 import com.github.zeng1990java.jiandan.utils.CopyUtil;
@@ -26,9 +27,15 @@ import butterknife.ButterKnife;
  */
 public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.ViewHolder>{
 
+    private RequestManager mRequestManager;
+
+    public MeiziAdapter(RequestManager rm){
+        mRequestManager = rm;
+    }
+
     @Override
     public ViewHolder onCreateNormalViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
-        return ViewHolder.newInstance(inflater, parent);
+        return ViewHolder.newInstance(inflater, parent).setRequestManager(mRequestManager);
     }
 
     @Override
@@ -50,6 +57,7 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
         ImageView gifIcon;
 
         private PictureModel mPictureModel;
+        private RequestManager mRequestManager;
 
         public static ViewHolder newInstance(LayoutInflater inflater, ViewGroup parent) {
             View view = inflater.inflate(R.layout.item_meizi, parent, false);
@@ -61,6 +69,11 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+        }
+
+        public ViewHolder setRequestManager(RequestManager requestManager) {
+            mRequestManager = requestManager;
+            return this;
         }
 
         public void onBindViewHolder(PictureModel pictureModel){
@@ -78,7 +91,7 @@ public class MeiziAdapter extends RvLoadmoreAdapter<PictureModel, MeiziAdapter.V
 
             time.setFormatTime(pictureModel.getComment_date());
 
-            picture.loadImage(Glide.with(itemView.getContext()), mPictureModel.getPic());
+            picture.loadImage(mRequestManager, mPictureModel.getPic());
             if (mPictureModel.getPic().endsWith(".gif")){
                 gifIcon.setVisibility(View.VISIBLE);
             }else {

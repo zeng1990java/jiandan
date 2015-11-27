@@ -52,4 +52,77 @@ public class NewsModel {
     private List<String> thumb_c;
     private NewsAuthor author;
     private List<NewsTag> tags;
+    private CustomFields custom_fields;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
+    }
+
+    public List<String> getThumb_c() {
+        return thumb_c;
+    }
+
+    public void setThumb_c(List<String> thumb_c) {
+        this.thumb_c = thumb_c;
+    }
+
+    public NewsAuthor getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(NewsAuthor author) {
+        this.author = author;
+    }
+
+    public List<NewsTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<NewsTag> tags) {
+        this.tags = tags;
+    }
+
+    public CustomFields getCustom_fields() {
+        return custom_fields;
+    }
+
+    public void setCustom_fields(CustomFields custom_fields) {
+        this.custom_fields = custom_fields;
+    }
 }

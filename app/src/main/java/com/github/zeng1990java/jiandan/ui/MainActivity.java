@@ -14,12 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.bumptech.glide.Glide;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
 import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
 import com.github.zeng1990java.jiandan.ui.fragments.JokeListFragment;
 import com.github.zeng1990java.jiandan.ui.fragments.MeiziPictureFragment;
+import com.github.zeng1990java.jiandan.ui.fragments.NewsFragment;
 import com.socks.library.KLog;
 import com.trello.rxlifecycle.ActivityEvent;
 
@@ -111,7 +113,7 @@ public class MainActivity extends BaseToolbarActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Glide.get(this).clearMemory();
         if (id == R.id.nav_camera) {
             // Handle the camera action
             getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new JokeListFragment()).commit();
@@ -120,7 +122,8 @@ public class MainActivity extends BaseToolbarActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new MeiziPictureFragment()).commit();
             setTitle(R.string.nav_meizi_picture);
         } else if (id == R.id.nav_slideshow) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_container, new NewsFragment()).commit();
+            setTitle(R.string.nav_news);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
