@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.api.JiandanApi;
 import com.github.zeng1990java.jiandan.model.JokeListModel;
+import com.github.zeng1990java.jiandan.theme.Prefrences;
 import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
 import com.github.zeng1990java.jiandan.ui.fragments.JokeListFragment;
 import com.github.zeng1990java.jiandan.ui.fragments.MeiziPictureFragment;
@@ -138,10 +139,16 @@ public class MainActivity extends BaseToolbarActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            Prefrences.changeTheme(this);
+            recreate();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void applyTheme() {
+        Prefrences.applyThmeMain(this);
     }
 }

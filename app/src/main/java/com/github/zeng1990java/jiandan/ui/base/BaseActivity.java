@@ -3,7 +3,9 @@ package com.github.zeng1990java.jiandan.ui.base;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 
+import com.github.zeng1990java.jiandan.theme.Prefrences;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -19,8 +21,14 @@ import com.github.zeng1990java.jiandan.R;
 public class BaseActivity extends RxAppCompatActivity {
 
     @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        applyTheme();
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         setStatusBarColor();
     }
 
@@ -43,5 +51,9 @@ public class BaseActivity extends RxAppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    protected void applyTheme(){
+        Prefrences.applyThme(this);
     }
 }

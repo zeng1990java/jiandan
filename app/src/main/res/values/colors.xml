@@ -8,4 +8,15 @@
     <color name="secondaryText">#727272</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+    <color name="itemPrimaryBackgroud">#FFFFFF</color>
+
+    <!-- night theme -->
+    <color name="colorPrimaryInverse">#263238</color>
+    <color name="colorPrimaryDarkInverse">#212121</color>
+    <color name="colorAccentInverse">#0D47A1</color>
+    <color name="primaryTextInverse">#FFFFFF</color>
+    <color name="secondaryTextInverse">#AAAAAA</color>
+    <color name="itemPrimaryBackgroudInverse">#37474F</color>
+    <color name="dividerInverse">#424242</color>
+
 </resources>

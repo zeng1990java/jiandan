@@ -6,6 +6,6 @@
     android:layout_height="25dp"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
-    wheel:matProg_barColor="@color/colorAccent"
+    wheel:matProg_barColor="?attr/colorAccent"
     wheel:matProg_barWidth="2dp"
     wheel:matProg_progressIndeterminate="true" />

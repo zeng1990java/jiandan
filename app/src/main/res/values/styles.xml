@@ -8,7 +8,10 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:textColorPrimary">@color/primaryText</item>
+        <item name="android:textColorSecondary">@color/secondaryText</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="themedCardBackgroundColor">@color/itemPrimaryBackgroud</item>
+        <item name="android:divider">@color/divider</item>
     </style>
 
     <!-- Base application theme. -->
@@ -17,7 +20,7 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppThemeMain" parent="BaseTheme">
+    <style name="AppThemeMain" parent="AppTheme">
         <!-- Customize your theme here. -->
     </style>
 
@@ -25,4 +28,27 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="BaseTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryInverse</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkInverse</item>
+        <item name="colorAccent">@color/colorAccentInverse</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:textColorPrimary">@color/primaryTextInverse</item>
+        <item name="android:textColorSecondary">@color/secondaryTextInverse</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="themedCardBackgroundColor">@color/itemPrimaryBackgroudInverse</item>
+        <item name="android:divider">@color/dividerInverse</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Dark" parent="BaseTheme.Dark">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppThemeMain.Dark" parent="AppTheme.Dark">
+        <!-- Customize your theme here. -->
+    </style>
 </resources>

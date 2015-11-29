@@ -7,9 +7,21 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppThemeMain" parent="BaseTheme">
+    <style name="AppThemeMain" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Dark" parent="BaseTheme.Dark">
         <!-- Customize your theme here. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppThemeMain.Dark" parent="AppTheme.Dark">
+        <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>
