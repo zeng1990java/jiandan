@@ -24,22 +24,13 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:textColor="@color/primaryText"
-                android:textSize="18dp"
-                tools:text="生ID发 i 哦空间里发的 可怜的房间里看到"
+                style="@style/ItemNewsTitle"
+                tools:text="成功心理学的密码"
                 />
 
             <TextView
                 android:id="@+id/nickname_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:singleLine="true"
-                android:textColor="@color/secondaryText"
-                android:textSize="16dp"
+                style="@style/ItemNicknameGroup"
                 tools:text="淡化 @ 心理学"
                 />
         </FrameLayout>

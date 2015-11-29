@@ -2,6 +2,7 @@ package com.github.zeng1990java.jiandan.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -26,6 +27,9 @@ import rx.schedulers.Schedulers;
  * @date 15/11/27 下午9:23
  */
 public class NewsDetailActivity extends BaseToolbarActivity {
+
+    static final String MIME_TYPE = "text/html";
+    static final String ENCODING = "utf-8";
 
     private static final String NEWS_ID = "news_id";
     private static final String NEWS_TITLE = "news_title";
@@ -86,7 +90,7 @@ public class NewsDetailActivity extends BaseToolbarActivity {
 
                     @Override
                     public void onNext(NewsDetailModel newsDetailModel) {
-                        mWebView.loadDataWithBaseURL("", getHtml(newsDetailModel.getPost().getContent()), "text/html", "UTF-8", "");
+                        mWebView.loadDataWithBaseURL("", getHtml(newsDetailModel.getPost().getContent()), MIME_TYPE, ENCODING, "");
                     }
                 });
     }
@@ -97,7 +101,7 @@ public class NewsDetailActivity extends BaseToolbarActivity {
     }
 
     private String getHtml(String content) {
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder(content.length() + 500);
         sb.append("<!DOCTYPE html>");
         sb.append("<html dir=\"ltr\" lang=\"zh\">");
         sb.append("<head>");
