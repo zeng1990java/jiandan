@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 
 import com.github.zeng1990java.jiandan.R;
+import com.github.zeng1990java.jiandan.theme.ThemeUtil;
 
 /**
  * $desc
@@ -20,6 +21,7 @@ public class ColorSwipeRefreshLayout extends SwipeRefreshLayout {
 
     public ColorSwipeRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        int color = ThemeUtil.getThemeColor(context, "colorAccent");
+        setColorSchemeColors(color);
     }
 }

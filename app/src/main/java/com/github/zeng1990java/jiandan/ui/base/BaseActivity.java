@@ -4,8 +4,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 
 import com.github.zeng1990java.jiandan.theme.Prefrences;
+import com.github.zeng1990java.jiandan.theme.ThemeUtil;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -43,7 +45,12 @@ public class BaseActivity extends RxAppCompatActivity {
             tintManager.setStatusBarTintEnabled(true);
             // enable navigation bar tint
             tintManager.setNavigationBarTintEnabled(true);
-            tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
+            int color = ThemeUtil.getThemeColor(this, "colorPrimaryDark");
+            if (color > 0){
+                tintManager.setStatusBarTintColor(color);
+            }else {
+                tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
         }
     }
 

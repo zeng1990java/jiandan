@@ -12,11 +12,11 @@
 
     <!-- night theme -->
     <color name="colorPrimaryInverse">#263238</color>
-    <color name="colorPrimaryDarkInverse">#212121</color>
+    <color name="colorPrimaryDarkInverse">#26272B</color>
     <color name="colorAccentInverse">#0D47A1</color>
     <color name="primaryTextInverse">#FFFFFF</color>
     <color name="secondaryTextInverse">#AAAAAA</color>
-    <color name="itemPrimaryBackgroudInverse">#37474F</color>
-    <color name="dividerInverse">#424242</color>
+    <color name="itemPrimaryBackgroudInverse">#424242</color>
+    <color name="dividerInverse">#37474F</color>
 
 </resources>

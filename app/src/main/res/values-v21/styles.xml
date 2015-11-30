@@ -16,7 +16,7 @@
     <style name="AppTheme.Dark" parent="BaseTheme.Dark">
         <!-- Customize your theme here. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDarkInverse</item>
     </style>
 
     <!-- Base application theme. -->
