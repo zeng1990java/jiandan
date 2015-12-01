@@ -9,6 +9,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
     <color name="itemPrimaryBackgroud">#FFFFFF</color>
+    <color name="primaryBackgroud">#FFFFFF</color>
 
     <!-- night theme -->
     <color name="colorPrimaryInverse">#263238</color>
@@ -17,6 +18,7 @@
     <color name="primaryTextInverse">#FFFFFF</color>
     <color name="secondaryTextInverse">#AAAAAA</color>
     <color name="itemPrimaryBackgroudInverse">#424242</color>
+    <color name="primaryBackgroudInverse">#424242</color>
     <color name="dividerInverse">#37474F</color>
 
 </resources>

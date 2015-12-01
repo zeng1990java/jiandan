@@ -11,6 +11,7 @@ import com.github.zeng1990java.jiandan.App;
 import com.github.zeng1990java.jiandan.R;
 import com.github.zeng1990java.jiandan.model.NewsDetailModel;
 import com.github.zeng1990java.jiandan.model.NewsModel;
+import com.github.zeng1990java.jiandan.theme.Prefrences;
 import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
@@ -90,6 +91,7 @@ public class NewsDetailActivity extends BaseToolbarActivity {
 
                     @Override
                     public void onNext(NewsDetailModel newsDetailModel) {
+                        mWebView.setVisibility(View.VISIBLE);
                         mWebView.loadDataWithBaseURL("", getHtml(newsDetailModel.getPost().getContent()), MIME_TYPE, ENCODING, "");
                     }
                 });
@@ -98,15 +100,18 @@ public class NewsDetailActivity extends BaseToolbarActivity {
     private void setupWebView() {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(false);
+
     }
 
     private String getHtml(String content) {
         final StringBuilder sb = new StringBuilder(content.length() + 500);
+        boolean isDarkTheme = Prefrences.darkThemeEnabled(this);
+        final String cssStyle = isDarkTheme ? "style_night.css" : "style.css";
         sb.append("<!DOCTYPE html>");
         sb.append("<html dir=\"ltr\" lang=\"zh\">");
         sb.append("<head>");
         sb.append("<meta name=\"viewport\" content=\"width=100%; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;\" />");
-        sb.append("<link rel=\"stylesheet\" href='file:///android_asset/style.css' type=\"text/css\" media=\"screen\" />");
+        sb.append("<link rel=\"stylesheet\" href='file:///android_asset/"+cssStyle+"' type=\"text/css\" media=\"screen\" />");
         sb.append("</head>");
         sb.append("<body style=\"padding:0px 8px 8px 8px;\">");
         sb.append("<div id=\"pagewrapper\">");

@@ -11,6 +11,7 @@
         <item name="android:textColorSecondary">@color/secondaryText</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="themedCardBackgroundColor">@color/itemPrimaryBackgroud</item>
+        <item name="themedBackgroundColor">@color/primaryBackgroud</item>
         <item name="android:divider">@color/divider</item>
     </style>
 
@@ -39,6 +40,7 @@
         <item name="android:textColorSecondary">@color/secondaryTextInverse</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="themedCardBackgroundColor">@color/itemPrimaryBackgroudInverse</item>
+        <item name="themedBackgroundColor">@color/primaryBackgroudInverse</item>
         <item name="android:divider">@color/dividerInverse</item>
     </style>
 
