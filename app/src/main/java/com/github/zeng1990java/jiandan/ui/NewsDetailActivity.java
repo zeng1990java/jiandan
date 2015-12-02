@@ -3,9 +3,11 @@ package com.github.zeng1990java.jiandan.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.github.zeng1990java.jiandan.App;
 import com.github.zeng1990java.jiandan.R;
@@ -13,6 +15,7 @@ import com.github.zeng1990java.jiandan.model.NewsDetailModel;
 import com.github.zeng1990java.jiandan.model.NewsModel;
 import com.github.zeng1990java.jiandan.theme.Prefrences;
 import com.github.zeng1990java.jiandan.ui.base.BaseToolbarActivity;
+import com.github.zeng1990java.jiandan.view.SwipeBackLayout;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import butterknife.Bind;
@@ -27,7 +30,7 @@ import rx.schedulers.Schedulers;
  * @author zxb
  * @date 15/11/27 下午9:23
  */
-public class NewsDetailActivity extends BaseToolbarActivity {
+public class NewsDetailActivity extends BaseToolbarActivity implements SwipeBackLayout.Callback{
 
     static final String MIME_TYPE = "text/html";
     static final String ENCODING = "utf-8";
@@ -47,6 +50,8 @@ public class NewsDetailActivity extends BaseToolbarActivity {
         activity.startActivity(i);
     }
 
+    @Bind(R.id.swipe_back_layout)
+    SwipeBackLayout mSwipeBackLayout;
     @Bind(R.id.webview)
     WebView mWebView;
     @Bind(R.id.progress_wheel)
@@ -62,6 +67,8 @@ public class NewsDetailActivity extends BaseToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         ButterKnife.bind(this);
+
+        mSwipeBackLayout.setCallback(this);
 
         setupToolbar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,6 +107,7 @@ public class NewsDetailActivity extends BaseToolbarActivity {
     private void setupWebView() {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(false);
+        mWebView.setBackgroundColor(Color.TRANSPARENT);
 
     }
 
@@ -138,5 +146,26 @@ public class NewsDetailActivity extends BaseToolbarActivity {
         sb.append("</body>");
         sb.append("</html>");
         return sb.toString();
+    }
+
+    @Override
+    public void onSwipeStart() {
+
+    }
+
+    @Override
+    public void onSwipeProgress(float progress) {
+
+    }
+
+    @Override
+    public void onSwipeCancel() {
+
+    }
+
+    @Override
+    public void onSwipeComplete() {
+        finish();
+        overridePendingTransition(0 , 0);
     }
 }

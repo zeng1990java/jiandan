@@ -1,17 +1,9 @@
 package com.github.zeng1990java.jiandan.ui.base;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
-import android.util.TypedValue;
 
 import com.github.zeng1990java.jiandan.theme.Prefrences;
-import com.github.zeng1990java.jiandan.theme.ThemeUtil;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-
-import com.github.zeng1990java.jiandan.R;
 
 
 /**
@@ -26,32 +18,6 @@ public class BaseActivity extends RxAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         applyTheme();
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        setStatusBarColor();
-    }
-
-    /**
-     * set status bar color
-     */
-    protected void setStatusBarColor() {
-        if(Build.VERSION.SDK_INT == 19){
-            // create our manager instance after the content view is set
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-            // enable status bar tint
-            tintManager.setStatusBarTintEnabled(true);
-            // enable navigation bar tint
-            tintManager.setNavigationBarTintEnabled(true);
-            int color = ThemeUtil.getThemeColor(this, "colorPrimaryDark");
-            if (color > 0){
-                tintManager.setStatusBarTintColor(color);
-            }else {
-                tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
-            }
-        }
     }
 
     @Override
