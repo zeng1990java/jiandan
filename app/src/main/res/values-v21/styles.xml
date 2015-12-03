@@ -4,10 +4,12 @@
         <!-- Customize your theme here. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppThemeMain" parent="AppTheme">
+    <style name="AppThemeMain" parent="BaseTheme">
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
@@ -17,10 +19,12 @@
         <!-- Customize your theme here. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDarkInverse</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppThemeMain.Dark" parent="AppTheme.Dark">
+    <style name="AppThemeMain.Dark" parent="BaseTheme.Dark">
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

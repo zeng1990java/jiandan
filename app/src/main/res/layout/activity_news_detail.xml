@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.github.zeng1990java.jiandan.view.SwipeBackLayout
+    android:id="@+id/swipe_back_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    >
+    android:fitsSystemWindows="true">
 
-    <include layout="@layout/toolbar"/>
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:background="?attr/themedBackgroundColor"
+        android:orientation="vertical"
+        >
 
+        <include layout="@layout/toolbar"/>
 
-        <WebView
-            android:id="@+id/webview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            />
-
-        <com.pnikosis.materialishprogress.ProgressWheel
-            android:id="@+id/progress_wheel"
-            app:matProg_barColor="@color/colorAccent"
-            app:matProg_barWidth="4dp"
-            app:matProg_progressIndeterminate="true"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            />
-
-    </FrameLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
 
-</LinearLayout>
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <com.pnikosis.materialishprogress.ProgressWheel
+                android:id="@+id/progress_wheel"
+                app:matProg_barColor="?attr/colorAccent"
+                app:matProg_barWidth="4dp"
+                app:matProg_progressIndeterminate="true"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</com.github.zeng1990java.jiandan.view.SwipeBackLayout>
