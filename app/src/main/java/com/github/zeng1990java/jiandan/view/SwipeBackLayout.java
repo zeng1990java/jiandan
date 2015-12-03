@@ -1,7 +1,10 @@
 package com.github.zeng1990java.jiandan.view;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
@@ -9,6 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
+
+import com.github.zeng1990java.jiandan.R;
+import com.socks.library.KLog;
 
 /**
  * $desc
@@ -30,6 +36,8 @@ public class SwipeBackLayout extends FrameLayout {
     private int mMinimumFlingVelocity;
     private SwipeBackLayout.Callback mCallback;
     private boolean back = false;
+    private Drawable mShadowLeft;
+    private Rect mTempRect = new Rect();
 
     public SwipeBackLayout(Context context) {
         this(context, null);
@@ -44,6 +52,7 @@ public class SwipeBackLayout extends FrameLayout {
 
         mDragHelper = ViewDragHelper.create(this, 1.0f / 8.0f, new ViewDragCallback());
         mMinimumFlingVelocity = ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
+        mShadowLeft = ContextCompat.getDrawable(context, R.drawable.ic_shadow_left);
     }
 
     public void setCallback(Callback callback) {
@@ -72,6 +81,27 @@ public class SwipeBackLayout extends FrameLayout {
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+
+        boolean ret = super.drawChild(canvas, child, drawingTime);
+
+        if (mDragHelper.getViewDragState() != ViewDragHelper.STATE_IDLE){
+            final Rect childRect = mTempRect;
+            child.getHitRect(childRect);
+            KLog.d(child.getClass().getSimpleName());
+            KLog.d(childRect.toShortString());
+            mShadowLeft.setBounds(childRect.left - mShadowLeft.getIntrinsicWidth(),
+                                  childRect.top,
+                                  childRect.left,
+                                  childRect.bottom
+                                  );
+            mShadowLeft.draw(canvas);
+        }
+
+        return ret;
     }
 
     class ViewDragCallback extends ViewDragHelper.Callback{
@@ -108,6 +138,8 @@ public class SwipeBackLayout extends FrameLayout {
             if (mCallback != null){
                 mCallback.onSwipeProgress(progress);
             }
+            // for draw shadow left: drawChild method will be call
+            invalidate();
         }
 
         @Override
